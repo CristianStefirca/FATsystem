@@ -35,7 +35,7 @@ python main.py
 2. Follow the prompts to perform the desired operation.
 
 
-3.View the console output for status messages and confirmations of the performed actions.
+3. View the console output for status messages and confirmations of the performed actions.
 
 ## Contributing
 

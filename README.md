@@ -29,12 +29,7 @@ python main.py
 
 1. Choose an option from the menu:
 
-Menu:
-1. Create directory
-2. Delete file or directory
-3. Rename file
-4. Move file
-5. Exit
+<img width="653" alt="Screenshot 2023-05-22 at 22 27 37" src="https://github.com/CristianStefirca/FATsystem/assets/110734859/d2e71401-84a5-49df-80cb-a242bd539574">
 
 
 2. Follow the prompts to perform the desired operation.

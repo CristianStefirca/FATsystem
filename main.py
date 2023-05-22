@@ -56,82 +56,67 @@ def write_data(storage_medium, start_offset, data):
 
 
 def print_menu():
-    print("File System CLI Menu:")  # Meniul interactiv al sistemului de fișiere
-    print("1. Creează director")
-    print("2. Șterge fișier sau director")
-    print("3. Redenumește fișier")
-    print("4. Muta fișier")
-    print("5. Ieșire")
-
-
-def create_directory(path):
-    try:
-        os.mkdir(path)  # Creează un director cu calea specificată
-        print(f"Director creat: {path}")
-    except FileExistsError:
-        print(f"Directorul există deja: {path}")
-    except OSError as e:
-        print(f"A apărut o eroare la crearea directorului: {e}")
-
-
-def delete_file(path):
-    try:
-        if os.path.isfile(path):
-            os.remove(path)  # Șterge fișierul specificat
-            print(f"Fișier șters: {path}")
-        elif os.path.isdir(path):
-            shutil.rmtree(path)  # Șterge directorul specificat și conținutul său
-            print(f"Director șters: {path}")
-        else:
-            print(f"Fișierul sau directorul nu a fost găsit: {path}")
-    except OSError as e:
-        print(f"A apărut o eroare la ștergerea fișierului sau directorului: {e}")
-
-
-def rename_file(old_path, new_path):
-    try:
-        if os.path.isfile(old_path) or os.path.isdir(old_path):
-            os.rename(old_path, new_path)  # Redenumește fișierul sau directorul specificat
-            print(f"Redenumit: {old_path} -> {new_path}")
-        else:
-            print(f"Fișierul sau directorul nu a fost găsit: {old_path}")
-    except OSError as e:
-        print(f"A apărut o eroare la redenumirea fișierului sau directorului: {e}")
-
+    print("File System CLI Menu:")
+    print("1. Create Directory")
+    print("2. Delete File or Directory")
+    print("3. Rename File")
+    print("4. Move File")
+    print("5. Print Current Directory")
+    print("6. Exit")
 
 def move_file(old_path, new_path):
     try:
         if os.path.isfile(old_path) or os.path.isdir(old_path):
-            shutil.move(old_path, new_path)  # Muta fișierul sau directorul specificat
-            print(f"Mutat: {old_path} -> {new_path}")
+            shutil.move(old_path, new_path)
+            print(f"Moved: {old_path} -> {new_path}")
         else:
-            print(f"Fișierul sau directorul nu a fost găsit: {old_path}")
+            print(f"File or directory not found: {old_path}")
     except shutil.Error as e:
-        print(f"A apărut o eroare la mutarea fișierului sau directorului: {e}")
+        print(f"Error occurred while moving file or directory: {e}")
 
+def rename_file(old_path, new_path):
+    try:
+        if os.path.isfile(old_path) or os.path.isdir(old_path):
+            os.rename(old_path, new_path)
+            print(f"Renamed: {old_path} -> {new_path}")
+        else:
+            print(f"File or directory not found: {old_path}")
+    except OSError as e:
+        print(f"Error occurred while renaming file or directory: {e}")
+
+def create_directory(path):
+    try:
+        os.mkdir(path)
+        print(f"Created directory: {path}")
+    except FileExistsError:
+        print(f"Directory already exists: {path}")
+    except OSError as e:
+        print(f"Error occurred while creating directory: {e}")
 
 def handle_menu_choice(choice):
     if choice == "1":
-        path = input("Introduceți calea directorului de creat: ")
+        path = input("Enter the directory path to create: ")
         create_directory(path)
     elif choice == "2":
-        path = input("Introduceți calea fișierului sau directorului de șters: ")
+        path = input("Enter the file or directory path to delete: ")
         delete_file(path)
     elif choice == "3":
-        old_path = input("Introduceți calea fișierului de redenumit: ")
-        new_path = input("Introduceți noul nume sau cale pentru fișier: ")
+        old_path = input("Enter the path of the file to rename: ")
+        new_path = input("Enter the new name or path for the file: ")
         rename_file(old_path, new_path)
     elif choice == "4":
-        old_path = input("Introduceți calea fișierului de mutat: ")
-        new_path = input("Introduceți noua cale pentru fișier: ")
+        old_path = input("Enter the path of the file to move: ")
+        new_path = input("Enter the new path for the file: ")
         move_file(old_path, new_path)
     elif choice == "5":
-        print("Ieșire...")
+        print(f"Current Directory: {os.getcwd()}")
+    elif choice == "6":
+        print("Exiting...")
         return True
     else:
-        print("Opțiune invalidă. Vă rugăm să încercați din nou.")
+        print("Invalid choice. Please try again.")
 
-    print()  # Adaugă o linie goală pentru o mai bună lizibilitate
+    print()  # Add a blank line for better readability
 
 
 # define a structure for the FAT
@@ -206,11 +191,10 @@ def create_file(storage_medium, filename, extension):
 def main():
     while True:
         print_menu()
-        choice = input("Introduceți opțiunea (1-5): ")
+        choice = input("Enter your choice (1-6): ")
         exit_requested = handle_menu_choice(choice)
         if exit_requested:
             break
-
 
 if __name__ == "__main__":
     main()

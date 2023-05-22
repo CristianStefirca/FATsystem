@@ -1,7 +1,9 @@
 import argparse
 import os
 import shutil
+import send2trash
 import sys
+import platform
 from datetime import datetime
 
 
@@ -56,6 +58,7 @@ def write_data(storage_medium, start_offset, data):
 
 
 def print_menu():
+    # Afiseaza meniul pentru CLI-ul sistemului de fisiere
     print("File System CLI Menu:")
     print("1. Create Directory")
     print("2. Delete File or Directory")
@@ -65,6 +68,7 @@ def print_menu():
     print("6. Exit")
 
 def move_file(old_path, new_path):
+    # Mută un fișier sau director dintr-un loc în altul
     try:
         if os.path.isfile(old_path) or os.path.isdir(old_path):
             shutil.move(old_path, new_path)
@@ -75,6 +79,7 @@ def move_file(old_path, new_path):
         print(f"Error occurred while moving file or directory: {e}")
 
 def rename_file(old_path, new_path):
+   # Redenumește un fișier sau director
     try:
         if os.path.isfile(old_path) or os.path.isdir(old_path):
             os.rename(old_path, new_path)
@@ -85,6 +90,7 @@ def rename_file(old_path, new_path):
         print(f"Error occurred while renaming file or directory: {e}")
 
 def create_directory(path):
+    # Creează un director nou
     try:
         os.mkdir(path)
         print(f"Created directory: {path}")
@@ -93,7 +99,34 @@ def create_directory(path):
     except OSError as e:
         print(f"Error occurred while creating directory: {e}")
 
+
+
+def delete_file(path):
+    # Delete a file or directory and move it to the appropriate trash bin
+    try:
+        if os.path.isfile(path):
+            if platform.system() == "Darwin":  # macOS
+                send2trash.send2trash(path)
+                print(f"File moved to Trash: {path}")
+            elif platform.system() == "Windows":  # Windows
+                # Move to Recycle Bin using the send2trash module
+                send2trash.send2trash(path)
+                print(f"File moved to Recycle Bin: {path}")
+            else:
+                # For other platforms, fall back to permanent deletion
+                os.remove(path)
+                print(f"File permanently deleted: {path}")
+        elif os.path.isdir(path):
+            shutil.rmtree(path)
+            print(f"Directory deleted: {path}")
+        else:
+            print(f"File or directory not found: {path}")
+    except OSError as e:
+        print(f"Error occurred while deleting file or directory: {e}")
+
+
 def handle_menu_choice(choice):
+    # Procesează opțiunea selectată din meniu
     if choice == "1":
         path = input("Enter the directory path to create: ")
         create_directory(path)

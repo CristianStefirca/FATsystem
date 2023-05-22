@@ -15,7 +15,7 @@
 1. Clone the repository:
 
    ```shell
-   git clone https://github.com/your-username/FATsystem.git
+   git clone https://github.com/cristianstefirca/FATsystem.git
 
 
 2. Change to the project directory:

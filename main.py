@@ -58,14 +58,17 @@ def write_data(storage_medium, start_offset, data):
 
 
 def print_menu():
-    # Afiseaza meniul pentru CLI-ul sistemului de fisiere
+    # Dam display la meniul CLI-ului
     print("File System CLI Menu:")
     print("1. Create Directory")
-    print("2. Delete File or Directory")
-    print("3. Rename File")
-    print("4. Move File")
-    print("5. Print Current Directory")
-    print("6. Exit")
+    print("2. Create File")
+    print("3. Delete File or Directory")
+    print("4. Rename File")
+    print("5. Move File")
+    print("6. Print Current Directory")
+    print("7. Exit")
+
+
 
 def move_file(old_path, new_path):
     # Mută un fișier sau director dintr-un loc în altul
@@ -102,18 +105,18 @@ def create_directory(path):
 
 
 def delete_file(path):
-    # Delete a file or directory and move it to the appropriate trash bin
+    # Șterge un fișier sau un director și îl mută în coșul de gunoi corespunzător
     try:
         if os.path.isfile(path):
             if platform.system() == "Darwin":  # macOS
                 send2trash.send2trash(path)
                 print(f"File moved to Trash: {path}")
             elif platform.system() == "Windows":  # Windows
-                # Move to Recycle Bin using the send2trash module
+                # Se da send to Recycle bin folosing send2trash module
                 send2trash.send2trash(path)
                 print(f"File moved to Recycle Bin: {path}")
             else:
-                # For other platforms, fall back to permanent deletion
+                # Pentru alte platforme, se da permanenet delete
                 os.remove(path)
                 print(f"File permanently deleted: {path}")
         elif os.path.isdir(path):
@@ -126,33 +129,36 @@ def delete_file(path):
 
 
 def handle_menu_choice(choice):
-    # Procesează opțiunea selectată din meniu
+    # Alegerea meniului CLI
     if choice == "1":
         path = input("Enter the directory path to create: ")
         create_directory(path)
     elif choice == "2":
+        path = input("Enter the file path to create: ")
+        create_file(path)
+    elif choice == "3":
         path = input("Enter the file or directory path to delete: ")
         delete_file(path)
-    elif choice == "3":
+    elif choice == "4":
         old_path = input("Enter the path of the file to rename: ")
         new_path = input("Enter the new name or path for the file: ")
         rename_file(old_path, new_path)
-    elif choice == "4":
+    elif choice == "5":
         old_path = input("Enter the path of the file to move: ")
         new_path = input("Enter the new path for the file: ")
         move_file(old_path, new_path)
-    elif choice == "5":
-        print(f"Current Directory: {os.getcwd()}")
     elif choice == "6":
+        print(f"Current Directory: {os.getcwd()}")
+    elif choice == "7":
         print("Exiting...")
         return True
     else:
         print("Invalid choice. Please try again.")
 
-    print()  # Add a blank line for better readability
+    print()  # Lasam o linie pt vizibilitate
 
 
-# define a structure for the FAT
+# definim o structura FAT
 class FATEntry:
     def __init__(self, used, next):
         self.used = used  # Indicator dacă clusterul este utilizat
@@ -191,7 +197,7 @@ def create_storage_medium(total_blocks):
     return storage_medium
 
 
-def create_file(storage_medium, filename, extension):
+def create_file2(storage_medium, filename, extension):
     free_block = -1
     for i, fat_entry in enumerate(storage_medium.fat):
         if not fat_entry.used:
@@ -219,6 +225,18 @@ def create_file(storage_medium, filename, extension):
 
     print(f"Fișierul '{filename}.{extension}' a fost creat cu succes.")
     print(f"Clusterul de start: {free_block}")
+
+
+def create_file(path):
+    # Create a new file
+    try:
+        with open(path, "w") as file:
+            print(f"Created file: {path}")
+    except FileExistsError:
+        print(f"File already exists: {path}")
+    except OSError as e:
+        print(f"Error occurred while creating file: {e}")
+
 
 
 def main():

@@ -1,4 +1,4 @@
-![cristian-stefirca-high-resolution-color-logo-3](https://github.com/CristianStefirca/FATsystem/assets/110734859/391e1847-b1f9-4a80-ae61-4d284494d0f1)
+
 
 
 > A simple file management system implemented in Python, allowing you to create, delete, rename, and move files and directories.
